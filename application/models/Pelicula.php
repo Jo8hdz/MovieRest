@@ -23,10 +23,10 @@ class Pelicula extends MY_Model{
             $this ->db->like('p.nombre', $palabra);//busca coincidencias con la palabra (no tiene que ser exactamente igual por eso usamos like)
         }
         //filtros
-        if (isset($idGenero)) { //checa si idGenero es nulo
+        if (isset($idGenero) && $idGenero != "") { //checa si idGenero es nulo
             $this ->db->where('g.idGenero', $idGenero);// devuelve los resultados con exactamente ese dato en ese campo
         }
-        if (isset($anio)) { //checa si anio es nulo
+        if (isset($anio) && $anio!="") { //checa si anio es nulo
             $this ->db->where('anio', $anio);// devuelve los resultados con exactamente ese dato en ese campo
         } 
 
