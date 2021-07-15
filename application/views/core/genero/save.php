@@ -9,10 +9,10 @@
 
 <div class="form-group">
     <?php
-    echo form_label('Nombre', 'name');
+    echo form_label('Nombre', 'nombre');
     $input = array(
-        'name' => 'name',
-        'value' => $name,
+        'name' => 'nombre',
+        'value' => $nombre,
         'class' => 'form-control',
         'placeholder' => "Nombre"
     );

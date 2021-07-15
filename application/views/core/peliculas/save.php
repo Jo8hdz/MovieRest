@@ -37,7 +37,7 @@
     <?php
     echo form_label('Año', 'anio');
     $input = array(
-        'name' => 'nombre',
+        'name' => 'anio',
         'value' => $anio,
         'type' => 'number',
         'class' => 'form-control',
@@ -60,7 +60,7 @@
 </div>
 
 <div class="form-group">
-    <?php
+    <?php 
     echo form_label('Tipo', 'genero');
     echo form_dropdown('idGenero', $genero, $idGenero,'class="form-control input-lg"');
     ?>

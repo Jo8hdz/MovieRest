@@ -6,15 +6,15 @@ class Dashboard extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-
-        verifyAuth();
+        
+        //verifyAuth();
     }
 
     public function index() {
         //$this->load->view('user/login');
         $view['body']="<div>hola Mundo</div>";
         $view['title'] = "Título";
-        $this->parser->parser('core/templates/body', $view);
+        $this->parser->parse('core/templates/body', $view);
         echo "Admin";
 
     }
@@ -23,18 +23,16 @@ class Dashboard extends CI_Controller {
         $datos["peliculas"]= $this->Pelicula->findAll(); //modelo que se encarga de traer los datos
         // construye la vista del listado de peliculas
         $view['title'] = "Lista de Peliculas";
-        $view['body']=$this->load->view("core/peliculas/lista", $datos, TRUE);        
-        $this->parser->parser('core/templates/body', $view);
+        $view['body']=$this->load->view("core/peliculas/list", $datos, TRUE); //devuelve el html de la vista       
+        $this->parser->parse('core/templates/body', $view);
     }
 
     public function pelicula_save($idPelicula = null) {
-
+        
         // Capa de Modelo, carga la datos  
         // por el metodo de HTTP
-
         $vdatos["idGenero"] = $vdatos["nombre"] = $vdatos["anio"] = $vdatos["descripcion"] = $vdatos["imagen"] = "";
-
-        $vdatos["genero"] = type_movies_to_form($this->genero->findAll());
+        $vdatos["genero"] = type_movies_to_form($this->Genero->findAll());
         
         if ($idPelicula != null) {
             $pelicula = $this->Pelicula->find($idPelicula);
@@ -48,8 +46,7 @@ class Dashboard extends CI_Controller {
             }
         }
 
-        if ($this->input->server("REQUEST_METHOD") == "POST") {
-
+        if ($this->input->server("REQUEST_METHOD") == "POST") { // metodo http
             // reglas de validacion
             $this->form_validation->set_rules('nombre', 'Nombre', 'required|min_length[3]');
             $this->form_validation->set_rules('descripcion', 'Descripción', 'required|min_length[10]');
@@ -64,16 +61,17 @@ class Dashboard extends CI_Controller {
             //revisar reglas de validacion
             if ($this->form_validation->run() == FALSE) {
                 
-            } else {
-                if ($idPelicula == null)
+            } 
+            else {
+                if ($idPelicula == null){
                     $idPelicula = $this->Pelicula->insert($save);
-                else
+                }
+                else{
                     $this->Pelicula->update($idPelicula, $save);
-
+                }
                 $this->do_upload($idPelicula);
             }
         }
-
         // Capa de la Vista
         $view['body'] = $this->load->view("core/peliculas/save", $vdatos, TRUE);
         $view['title'] = "Registrar película";
@@ -105,27 +103,25 @@ class Dashboard extends CI_Controller {
         $view['title'] = "Mostrar película: " . $pelicula->nombre;
         $this->parser->parse('core/templates/body', $view);
     }
-
+    
     public function pelicula_delete($idPelicula = null) {
         if ($idPelicula == null) {
             show_404();
         }
-
         $this->Pelicula->delete($idPelicula);
-
         redirect("/core/dashboard/pelicula_list");
     }
 
-    /* CRUD para tipos de peliculas */
+    //CRUD para Generos 
 
     public function genero_list() {
 
         // Capa de Modelo, carga la datos  
-        $datos["genero"] = $this->genero->findAll();
+        $datos["genero"] = $this->Genero->findAll();
 
         // Capa de la Vista
         $view['body'] = $this->load->view("core/genero/list", $datos, TRUE);
-        $view['title'] = "Listado de tipos de películas";
+        $view['title'] = "Listado de generos de películas";
         $this->parser->parse('core/templates/body', $view);
     }
 
@@ -145,13 +141,10 @@ class Dashboard extends CI_Controller {
         }
 
         if ($this->input->server("REQUEST_METHOD") == "POST") {
-
             // reglas de validacion
             $this->form_validation->set_rules('nombre', 'Nombre', 'required|min_length[3]');
-
             // obteniendo los datos del formulario
             $save["nombre"] = $vdatos["nombre"] = $this->input->post("nombre");
-
             //revisar reglas de validacion
             if ($this->form_validation->run() == FALSE) {
                 
@@ -165,27 +158,24 @@ class Dashboard extends CI_Controller {
 
         // Capa de la Vista
         $view['body'] = $this->load->view("core/genero/save", $vdatos, TRUE);
-        $view['title'] = "Registrar tipos de películas";
+        $view['title'] = "Registrar Generos de películas";
         $this->parser->parse('core/templates/body', $view);
     }
 
     public function genero_show($idGenero = null) {
-
         // Capa de Modelo, carga la datos  
         // por el metodo de HTTP
-
         if ($idGenero == null) {
             show_404();
         }
 
-        $genero = $this->genero->find($idGenero);
+        $genero = $this->Genero->find($idGenero);
 
         if (!is_object($genero)) {
             show_404();
         }
 
         $vdatos["nombre"] = $genero->nombre;
-
         // Capa de la Vista
         $view['body'] = $this->load->view("core/genero/show", $vdatos, TRUE);
         $view['title'] = "Mostrar película: " . $genero->nombre;
@@ -196,9 +186,7 @@ class Dashboard extends CI_Controller {
         if ($idGenero == null) {
             show_404();
         }
-
-        $this->genero->delete($idGenero);
-
+        $this->Genero->delete($idGenero);
         redirect("/core/dashboard/genero_list");
     }
 

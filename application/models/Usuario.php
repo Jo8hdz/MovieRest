@@ -11,15 +11,16 @@ class Usuario extends MY_Model{
         parent::__construct();    
     }
 
-    function checkLogin($email, $plainPassword){        
+    function checkLogin($email, $plainPassword){
+        // trae los datos del usuario con ese email        
         $this ->db->select();
         $this ->db->from($this->table);        
-        $this ->db->where("email", $email);  // 
+        $this ->db->where("email", $email);  
         
         $query = $this ->db->get();
-        $usuario= $query->row();
-        if (!empty($usuario)) {
-            if (verificarHashedPassword($plainPassword,$usuario->password)) {
+        $usuario= $query->row();// guarda los datos que resultantes del query en la variable usuario
+        if (!empty($usuario)) {// si no esta vacio
+            if (verifyHashedPassword($plainPassword,$usuario->password)) {
                 return $usuario;
             }
         }

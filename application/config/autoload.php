@@ -58,7 +58,7 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array('parser','session','form_validation'); //carga las librerias
+$autoload['libraries'] = array('parser','session','form_validation'); // carga las librerias manera global para no tener que cargarlos en cada archivo en que los queramos usar
 
 /*
 | -------------------------------------------------------------------
@@ -89,7 +89,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array();
+$autoload['helper'] = array('usuario','url','form','pelicula');// carga los helpers manera global para no tener que cargarlos en cada archivo en que los queramos usar
 
 /*
 | -------------------------------------------------------------------
@@ -132,4 +132,4 @@ $autoload['language'] = array();
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array();
+$autoload['model'] = array('Usuario','Genero','Pelicula'); // carga los modelos de manera global para no tener que cargarlos en cada archivo en que los queramos usar

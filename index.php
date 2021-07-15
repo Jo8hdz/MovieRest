@@ -36,6 +36,7 @@
  * @filesource
  */
 define('TAMANIO_PAGINA', 10);// Tamaño de paginacion por default
+define('NOMBRE_APP', "+Movies");// Nombre de la aplicacion
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT

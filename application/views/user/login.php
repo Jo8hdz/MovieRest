@@ -12,19 +12,20 @@
         <div class="wrapper fadeInDown">
             <div id="formContent">
                 <!-- Tabs Titles -->
-                <?php echo validation_errors(); ?>
+                
                 <!-- Icon -->
                 <div class="fadeIn first">
-                    <img src="http://danielzawadzki.com/codepen/01/icon.svg" id="icon" alt="User Icon" />
+                    <img src="<?php echo base_url() ?>assets/img/logo_grande.png" id="icon" alt="User Icon" />
                 </div>
 
                 <!-- Login Form -->
                 <form method= "POST" action="" >
                     <input type="text" id="login" class="fadeIn second" name="email" placeholder="login">
-                    <input type="text" id="password" class="fadeIn third" name="password" placeholder="password">
+                    <input type="password" id="password" class="fadeIn third" name="password" placeholder="password">
+                    <?php echo validation_errors(); ?>
                     <input type="submit" class="fadeIn fourth" value="Log In">
                 </form>
-
+                
                 <!-- Remind Passowrd -->
                 <div id="formFooter">
                     <a class="underlineHover" href="#">Forgot Password?</a>

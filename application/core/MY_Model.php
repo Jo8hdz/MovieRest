@@ -27,13 +27,13 @@ class MY_Model extends CI_Model{
         $this ->db->update($this->table, $data);
     }
 
-    function delete($id, $data){ // borra un registro
+    function delete($id/*, $data*/){ // borra un registro
         $this ->db->where($this->table_id, $id);
         $this ->db->delete($this->table);
     }
 
     function insert($data){ // inserta un registro
-        $this ->db->update($this->table, $data);
+        $this ->db->insert($this->table, $data);
         return $this ->db->insert_id(); //devuelve el id del elemento insertado
     }
 
