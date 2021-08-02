@@ -22,10 +22,12 @@ create table pelicula(
 );
 
 create table usuario(
-	idusuario int not null primary key,
+	idusuario int auto_increment not null primary key,
     nombre varchar(255),
 	email varchar(255),
     password varchar(255),
+    tipo enum('admin','regular') not null DEFAULT 'regular',
+    token varchar(100) not null,
     deleted_at int (1)
 );
 
@@ -37,6 +39,33 @@ create TABLE IF NOT EXISTS `ci_sessions` (
     KEY `ci_sessions_timestamp` (`timestamp`)
 );
 
+create table favorito(
+	idFavorito int auto_increment not null primary key,
+    idPelicula int not null,
+	idusuario int not null,
+    foreign key (idPelicula) references pelicula(idPelicula),
+    foreign key (idusuario) references usuario(idusuario),
+    deleted_at int (1)
+);
+
+create table calificacion(
+	idCalificacion int auto_increment not null primary key,
+    calificacion int not null,
+    idPelicula int not null,
+	idusuario int not null,
+    foreign key (idPelicula) references pelicula(idPelicula),
+    foreign key (idusuario) references usuario(idusuario),
+    deleted_at int (1)
+);
+
+create table api(
+    idApi int auto_increment not null primary key,
+    tipo enum('texto','imagen','numero') not null,
+    etiqueta varchar(100) not null,
+    valor text not null
+);
+
+insert into api values (1, 'imagen', 'IMAGEN_PROMOCIONAL', 'avengers_endgame.jpg');
 
 insert into genero values   (1,'Terror',NULL),
                             (2,'Accion',NULL),

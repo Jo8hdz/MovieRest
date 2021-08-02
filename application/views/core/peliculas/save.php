@@ -67,7 +67,7 @@
 </div>
 
 <?php if ($imagen != ""): ?>
-    <img class="img-small" src="<?php echo base_url() ?>uploads/peliculas/<?php echo $imagen ?>">
+    <img class="img-small" src="<?php echo base_url() ?>uploads/movies/<?php echo $imagen ?>">
 <?php endif; ?>
 
 <?php echo form_submit('submit', 'Guardar', 'class="btn btn-primary"'); ?>

@@ -69,7 +69,8 @@ class Dashboard extends CI_Controller {
                 else{
                     $this->Pelicula->update($idPelicula, $save);
                 }
-                $this->do_upload($idPelicula);
+                $save= array("imagen" => $this->do_upload());
+                $this->Pelicula->update($idPelicula, $save);
             }
         }
         // Capa de la Vista
@@ -190,10 +191,10 @@ class Dashboard extends CI_Controller {
         redirect("/core/dashboard/genero_list");
     }
 
-    private function do_upload($idPelicula) {
+    private function do_upload($uri="movies") {
 
         // configuraciones sobre la carga del archivo
-        $config['upload_path'] = 'uploads/peliculas';
+        $config['upload_path'] = 'uploads/'.$uri;
         $config['allowed_types'] = 'gif|jpg|png';
         $config['max_size'] = 20000; //20 mb = 20000 kilobyte
         $config['max_width'] = 3840;
@@ -208,13 +209,29 @@ class Dashboard extends CI_Controller {
             return $this->upload->display_errors();
         } else {
             // mostrar datos de la carga de la imagenn
-            $datos = $this->upload->datos();
+            $datos = $this->upload->data();
 
             // actualizamos en base de datos
             $nombre = $datos['file_nombre'];
-            $save = array("imagen" => $nombre);
-            $this->Pelicula->update($idPelicula, $save);
+            return $nombre;
         }
+    }
+
+    public function imagen_promocional() {
+        
+        $api= $this->Api->findByTag("IMAGEN_PROMOCIONAL");
+        $vdatos["imagen"]= $api->valor;
+
+        if ($this->input->server("REQUEST_METHOD") == "POST") { // metodo http
+            
+            $save= array("valor" => $this->do_upload('api'));
+            $this->Api->update($api->idApi, $save);
+        
+        }
+        // Capa de la Vista
+        $view['body'] = $this->load->view("core/api/imagen_promocional/save", $vdatos, TRUE);
+        $view['title'] = "Registrar película";
+        $this->parser->parse('core/templates/body', $view);
     }
 
 }

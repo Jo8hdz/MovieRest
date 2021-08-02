@@ -14,7 +14,7 @@ class Pelicula extends MY_Model{
     function findRecords($buscar= array(), $idGenero= NULL, $anio= NULL, $offset=0){// si no le pasamos ningun parametro para los filtros los establece como nulos y si no le pasamos ninguna busqueda se establece un array vacio.
         
         //muestra todos los registros de la tabla pelicula y ademas el nombre del genero al que pertenecen.
-        $this ->db->select("p.*, g.nombre as genero");
+        $this ->db->select("p.nombre, p.anio, p.idPelicula, p.imagen, p.idGenero, g.nombre as genero");
         $this ->db->from("$this->table as p");
         $this ->db->join('genero as g', 'g.idGenero = p.idGenero', 'LEFT');
 

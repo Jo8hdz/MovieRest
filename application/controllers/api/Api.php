@@ -19,4 +19,4 @@ class Api extends REST_Controller{
         $data= $this->Pelicula->findAll();
         $this->response($data);
     }
-}
+}  

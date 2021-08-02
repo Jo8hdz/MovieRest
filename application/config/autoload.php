@@ -132,4 +132,4 @@ $autoload['language'] = array();
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array('Usuario','Genero','Pelicula'); // carga los modelos de manera global para no tener que cargarlos en cada archivo en que los queramos usar
+$autoload['model'] = array('Usuario','Genero','Pelicula','Favorito','Calificacion', 'Api'); // carga los modelos de manera global para no tener que cargarlos en cada archivo en que los queramos usar
