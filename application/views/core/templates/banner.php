@@ -2,12 +2,12 @@
     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
         <div class="page-header">
             <h2 class="pageheader-title">{title}</h2>
-            <p class="pageheader-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit cumque corrupti deserunt animi quibusdam commodi non eum quam vel magnam, doloribus odio, impedit doloremque veniam dolore atque ad, dolor unde.</p>
+            <p class="pageheader-text">Nulla euismod urna eros, sit amet scelerisque torton lectus vel mauris facilisis faucibus at enim quis massa lobortis rutrum.</p>
             <div class="page-breadcrumb">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Peliculas</li>
+                        <li class="breadcrumb-item active" aria-current="page">Listado de Peliculas</li>
                     </ol>
                 </nav>
             </div>

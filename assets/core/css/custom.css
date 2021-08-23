@@ -13,3 +13,12 @@
     border-radius: 5px;
     display: block;
 }
+
+.table{
+    background: #FFF;
+}
+
+.content{
+    background: #FFF;
+    padding: 15px;
+}

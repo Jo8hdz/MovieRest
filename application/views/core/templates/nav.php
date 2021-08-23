@@ -16,35 +16,35 @@
                         <div id="submenu-1" class="collapse submenu" style="">
                             <ul class="nav flex-column">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="<?php echo base_url() ?>core/dashboard/pelicula_list">Listado <span class="badge badge-secondary">New</span></a>
+                                    <a class="nav-link" href="<?php echo base_url() ?>core/dashboard/movie_list">Listado <span class="badge badge-secondary">New</span></a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="<?php echo base_url() ?>core/dashboard/pelicula_save">Crear</a>
+                                    <a class="nav-link" href="<?php echo base_url() ?>core/dashboard/movie_save">Crear</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2"><i class="fa fa-fw fa-list"></i>Generos</a>
+                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2"><i class="fa fa-fw fa-list"></i>Tipos de Películas</a>
                         <div id="submenu-2" class="collapse submenu" style="">
                             <ul class="nav flex-column">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="<?php echo base_url() ?>core/dashboard/genero_list">Listado <span class="badge badge-secondary">New</span></a>
+                                    <a class="nav-link" href="<?php echo base_url() ?>core/dashboard/type_movie_list">Listado <span class="badge badge-secondary">New</span></a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="<?php echo base_url() ?>core/dashboard/genero_save">Crear</a>
+                                    <a class="nav-link" href="<?php echo base_url() ?>core/dashboard/type_movie_save">Crear</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3" aria-controls="submenu-3"><i class="fa fa-fw fa-cog"></i>API</a>
+                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3" aria-controls="submenu-3"><i class="fa fa-fw fa-cog"></i>Api</a>
                         <div id="submenu-3" class="collapse submenu" style="">
                             <ul class="nav flex-column">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="<?php echo base_url() ?>core/dashboard/imagen_promocional">imagen promocional <span class="badge badge-secondary">New</span></a>
+                                    <a class="nav-link" href="<?php echo base_url() ?>core/dashboard/image_promotional">Imagen promocional <span class="badge badge-secondary">New</span></a>
                                 </li>
                             </ul>
                         </div>

@@ -6,232 +6,362 @@ class Dashboard extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        
-        //verifyAuth();
+
+        verifyAuth();
     }
 
     public function index() {
-        //$this->load->view('user/login');
-        $view['body']="<div>hola Mundo</div>";
-        $view['title'] = "Título";
-        $this->parser->parse('core/templates/body', $view);
-        echo "Admin";
-
+        redirect("/core/dashboard/movie_list");
     }
 
-    public function pelicula_list() {        
-        $datos["peliculas"]= $this->Pelicula->findAll(); //modelo que se encarga de traer los datos
-        // construye la vista del listado de peliculas
-        $view['title'] = "Lista de Peliculas";
-        $view['body']=$this->load->view("core/peliculas/list", $datos, TRUE); //devuelve el html de la vista       
-        $this->parser->parse('core/templates/body', $view);
-    }
+    public function movie_list() {
 
-    public function pelicula_save($idPelicula = null) {
-        
-        // Capa de Modelo, carga la datos  
-        // por el metodo de HTTP
-        $vdatos["idGenero"] = $vdatos["nombre"] = $vdatos["anio"] = $vdatos["descripcion"] = $vdatos["imagen"] = "";
-        $vdatos["genero"] = type_movies_to_form($this->Genero->findAll());
-        
-        if ($idPelicula != null) {
-            $pelicula = $this->Pelicula->find($idPelicula);
-
-            if (is_object($pelicula)) {
-                $vdatos["nombre"] = $pelicula->nombre;
-                $vdatos["anio"] = $pelicula->anio;
-                $vdatos["descripcion"] = $pelicula->descripcion;
-                $vdatos["imagen"] = $pelicula->imagen;
-                $vdatos["idGenero"] = $pelicula->idGenero;
-            }
-        }
-
-        if ($this->input->server("REQUEST_METHOD") == "POST") { // metodo http
-            // reglas de validacion
-            $this->form_validation->set_rules('nombre', 'Nombre', 'required|min_length[3]');
-            $this->form_validation->set_rules('descripcion', 'Descripción', 'required|min_length[10]');
-            $this->form_validation->set_rules('anio', 'Año', 'required');
-
-            // obteniendo los datos del formulario
-            $save["nombre"] = $vdatos["nombre"] = $this->input->post("nombre");
-            $save["anio"] = $vdatos["anio"] = $this->input->post("anio");
-            $save["descripcion"] = $vdatos["descripcion"] = $this->input->post("descripcion");
-            $save["idGenero"] = $vdatos["idGenero"] = $this->input->post("idGenero");
-
-            //revisar reglas de validacion
-            if ($this->form_validation->run() == FALSE) {
-                
-            } 
-            else {
-                if ($idPelicula == null){
-                    $idPelicula = $this->Pelicula->insert($save);
-                }
-                else{
-                    $this->Pelicula->update($idPelicula, $save);
-                }
-                $save= array("imagen" => $this->do_upload());
-                $this->Pelicula->update($idPelicula, $save);
-            }
-        }
-        // Capa de la Vista
-        $view['body'] = $this->load->view("core/peliculas/save", $vdatos, TRUE);
-        $view['title'] = "Registrar película";
-        $this->parser->parse('core/templates/body', $view);
-    }
-
-    public function pelicula_show($idPelicula = null) {
-
-        // Capa de Modelo, carga la datos  
-        // por el metodo de HTTP
-
-        if ($idPelicula == null) {
-            show_404();
-        }
-
-        $pelicula = $this->Pelicula->find($idPelicula);
-
-        if (!is_object($pelicula)) {
-            show_404();
-        }
-
-        $vdatos["nombre"] = $pelicula->nombre;
-        $vdatos["anio"] = $pelicula->anio;
-        $vdatos["descripcion"] = $pelicula->descripcion;
-        $vdatos["imagen"] = $pelicula->imagen;
+        // Capa de Modelo, carga la data  
+        $data["movies"] = $this->Movie->findAll();
 
         // Capa de la Vista
-        $view['body'] = $this->load->view("core/peliculas/show", $vdatos, TRUE);
-        $view['title'] = "Mostrar película: " . $pelicula->nombre;
-        $this->parser->parse('core/templates/body', $view);
-    }
-    
-    public function pelicula_delete($idPelicula = null) {
-        if ($idPelicula == null) {
-            show_404();
-        }
-        $this->Pelicula->delete($idPelicula);
-        redirect("/core/dashboard/pelicula_list");
-    }
-
-    //CRUD para Generos 
-
-    public function genero_list() {
-
-        // Capa de Modelo, carga la datos  
-        $datos["genero"] = $this->Genero->findAll();
-
-        // Capa de la Vista
-        $view['body'] = $this->load->view("core/genero/list", $datos, TRUE);
-        $view['title'] = "Listado de generos de películas";
+        $view['body'] = $this->load->view("core/movies/list", $data, TRUE);
+        $view['title'] = "Listado de películas";
         $this->parser->parse('core/templates/body', $view);
     }
 
-    public function genero_save($idGenero = null) {
+    public function movie_save($movie_id = null) {
 
-        // Capa de Modelo, carga la datos  
+        // Capa de Modelo, carga la data  
         // por el metodo de HTTP
 
-        $vdatos["nombre"] = "";
+        $vdata["movie_id"] = $vdata["type_movie_id"] = $vdata["name"] = $vdata["year"] = $vdata["description"] = $vdata["image"] = $vdata["video"] = "";
 
-        if ($idGenero != null) {
-            $genero = $this->Genero->find($idGenero);
+        $vdata["types_movie"] = type_movies_to_form($this->Type_movie->findAll());
 
-            if (is_object($genero)) {
-                $vdatos["nombre"] = $genero->nombre;
+        if ($movie_id != null) {
+            $movie = $this->Movie->find($movie_id);
+
+            if (is_object($movie)) {
+                $vdata["name"] = $movie->name;
+                $vdata["year"] = $movie->year;
+                $vdata["description"] = $movie->description;
+                $vdata["image"] = $movie->image;
+                $vdata["video"] = $movie->video;
+                $vdata["type_movie_id"] = $movie->type_movie_id;
+                $vdata["movie_id"] = $movie->movie_id;
             }
         }
 
         if ($this->input->server("REQUEST_METHOD") == "POST") {
+
             // reglas de validacion
-            $this->form_validation->set_rules('nombre', 'Nombre', 'required|min_length[3]');
+            $this->form_validation->set_rules('name', 'Nombre', 'required|min_length[3]');
+            $this->form_validation->set_rules('description', 'Descripción', 'required|min_length[10]');
+            $this->form_validation->set_rules('year', 'Año', 'required');
+
             // obteniendo los datos del formulario
-            $save["nombre"] = $vdatos["nombre"] = $this->input->post("nombre");
+            $save["name"] = $vdata["name"] = $this->input->post("name");
+            $save["year"] = $vdata["year"] = $this->input->post("year");
+            $save["description"] = $vdata["description"] = $this->input->post("description");
+            //$save["video"] = $vdata["video"] = $this->input->post("video"); // comentar esta linea si se activan las funciones para upload video
+            $save["type_movie_id"] = $vdata["type_movie_id"] = $this->input->post("type_movie_id");
+
             //revisar reglas de validacion
             if ($this->form_validation->run() == FALSE) {
                 
             } else {
-                if ($idGenero == null)
-                    $idGenero = $this->Genero->insert($save);
+                if ($movie_id == null)
+                    $movie_id = $this->Movie->insert($save);
                 else
-                    $this->Genero->update($idGenero, $save);
+                    $this->Movie->update($movie_id, $save);
+
+            $save = array("image" => $this->do_upload(), "video" => $this->do_upload_video()); //descomentar el segundo parametro para upload video
+                $this->Movie->update($movie_id, $save);
+
+                $this->session->set_flashdata("msj", "Película guardada");
+                $this->session->set_flashdata("type", "success");
+
+                redirect("/core/dashboard/movie_save/$movie_id");
             }
         }
 
         // Capa de la Vista
-        $view['body'] = $this->load->view("core/genero/save", $vdatos, TRUE);
-        $view['title'] = "Registrar Generos de películas";
+        $view['body'] = $this->load->view("core/movies/save", $vdata, TRUE);
+        $view['title'] = "Registrar película";
         $this->parser->parse('core/templates/body', $view);
     }
 
-    public function genero_show($idGenero = null) {
-        // Capa de Modelo, carga la datos  
+    function movie_delete_image($movie_id = null) {
+        if (!isset($movie_id)) {
+            show_404();
+        }
+
+        $movie = $this->Movie->find($movie_id);
+
+        if (!isset($movie)) {
+            show_404();
+        }
+
+        if ($movie->image !== "") {
+            unlink("uploads/movies/$movie->image");
+
+            $save["image"] = "";
+
+            $this->Movie->update($movie_id, $save);
+
+            $this->session->set_flashdata("msj", "Imagen eliminada");
+            $this->session->set_flashdata("type", "success");
+
+            redirect("/core/dashboard/movie_save/$movie->movie_id");
+        }
+    }   
+
+    public function image_promotional() {
+
+        // Capa de Modelo, carga la data  
         // por el metodo de HTTP
-        if ($idGenero == null) {
-            show_404();
+
+        $api = $this->Api->findByTag("IMAGE_PROMOTIONAL");
+        $vdata["image"] = $api->value;
+
+        if ($this->input->server("REQUEST_METHOD") == "POST") {
+            $save = array("value" => $this->do_upload('api'));
+            $this->Api->update($api->api_id, $save);
         }
 
-        $genero = $this->Genero->find($idGenero);
-
-        if (!is_object($genero)) {
-            show_404();
-        }
-
-        $vdatos["nombre"] = $genero->nombre;
         // Capa de la Vista
-        $view['body'] = $this->load->view("core/genero/show", $vdatos, TRUE);
-        $view['title'] = "Mostrar película: " . $genero->nombre;
+        $view['body'] = $this->load->view("core/api/image_promotional/save", $vdata, TRUE);
+        $view['title'] = "Registrar película";
         $this->parser->parse('core/templates/body', $view);
     }
 
-    public function genero_delete($idGenero = null) {
-        if ($idGenero == null) {
+    public function movie_show($movie_id = null) {
+
+        // Capa de Modelo, carga la data  
+        // por el metodo de HTTP
+
+        if ($movie_id == null) {
             show_404();
         }
-        $this->Genero->delete($idGenero);
-        redirect("/core/dashboard/genero_list");
+
+        $movie = $this->Movie->find($movie_id);
+
+        if (!is_object($movie)) {
+            show_404();
+        }
+
+        $vdata["name"] = $movie->name;
+        $vdata["year"] = $movie->year;
+        $vdata["description"] = $movie->description;
+        $vdata["image"] = $movie->image;
+        $vdata["video"] = $movie->video;
+
+        // Capa de la Vista
+        $view['body'] = $this->load->view("core/movies/show", $vdata, TRUE);
+        $view['title'] = "Mostrar película: " . $movie->name;
+        $this->parser->parse('core/templates/body', $view);
     }
 
-    private function do_upload($uri="movies") {
+    public function movie_delete($movie_id) {
+
+        $this->Movie->delete($movie_id);
+
+        echo 1;
+    }
+
+    /* CRUD para tipos de peliculas */
+
+    public function type_movie_list() {
+
+        // Capa de Modelo, carga la data  
+        $data["types_movie"] = $this->Type_movie->findAll();
+
+        // Capa de la Vista
+        $view['body'] = $this->load->view("core/types_movie/list", $data, TRUE);
+        $view['title'] = "Listado de tipos de películas";
+        $this->parser->parse('core/templates/body', $view);
+    }
+
+    public function type_movie_save($type_movie_id = null) {
+
+        // Capa de Modelo, carga la data  
+        // por el metodo de HTTP
+
+        $vdata["name"] = "";
+
+        if ($type_movie_id != null) {
+            $type_movie = $this->Type_movie->find($type_movie_id);
+
+            if (is_object($type_movie)) {
+                $vdata["name"] = $type_movie->name;
+            }
+        }
+
+        if ($this->input->server("REQUEST_METHOD") == "POST") {
+
+            // reglas de validacion
+            $this->form_validation->set_rules('name', 'Nombre', 'required|min_length[3]');
+
+            // obteniendo los datos del formulario
+            $save["name"] = $vdata["name"] = $this->input->post("name");
+
+            //revisar reglas de validacion
+            if ($this->form_validation->run() == FALSE) {
+                
+            } else {
+                if ($type_movie_id == null)
+                    $type_movie_id = $this->Type_movie->insert($save);
+                else
+                    $this->Type_movie->update($type_movie_id, $save);
+
+                $this->session->set_flashdata("msj", "Tipo guardado");
+                $this->session->set_flashdata("type", "success");
+
+                redirect("/core/dashboard/type_movie_save/$type_movie_id");
+            }
+        }
+
+        // Capa de la Vista
+        $view['body'] = $this->load->view("core/types_movie/save", $vdata, TRUE);
+        $view['title'] = "Registrar tipos de películas";
+        $this->parser->parse('core/templates/body', $view);
+    }
+
+    public function type_movie_show($type_movie_id = null) {
+
+        // Capa de Modelo, carga la data  
+        // por el metodo de HTTP
+
+        if ($type_movie_id == null) {
+            show_404();
+        }
+
+        $type_movie = $this->Type_movie->find($type_movie_id);
+
+        if (!is_object($type_movie)) {
+            show_404();
+        }
+
+        $vdata["name"] = $type_movie->name;
+
+        // Capa de la Vista
+        $view['body'] = $this->load->view("core/types_movie/show", $vdata, TRUE);
+        $view['title'] = "Mostrar película: " . $type_movie->name;
+        $this->parser->parse('core/templates/body', $view);
+    }
+
+    public function type_movie_delete($type_movie_id) {
+
+        $this->Type_movie->delete($type_movie_id);
+
+        echo 1;
+    }
+
+    private function do_upload($uri = "movies") {
 
         // configuraciones sobre la carga del archivo
-        $config['upload_path'] = 'uploads/'.$uri;
+        $config['upload_path'] = 'uploads/' . $uri;
         $config['allowed_types'] = 'gif|jpg|png';
         $config['max_size'] = 20000; //20 mb = 20000 kilobyte
         $config['max_width'] = 3840;
         $config['max_height'] = 2160;
+        $config['file_name'] = time() . "_" . $_FILES['image']['name'];
 
         // carga de la libreria
         $this->load->library('upload', $config);
 
-        // intento de subida de la imagenn
-        if (!$this->upload->do_upload('imagen')) {
+        // intento de subida de la imagen
+        if (!$this->upload->do_upload('image')) {
             // mostrar errores
             return $this->upload->display_errors();
         } else {
-            // mostrar datos de la carga de la imagenn
-            $datos = $this->upload->data();
+            // mostrar datos de la carga de la imagen
+            $data = $this->upload->data();
 
             // actualizamos en base de datos
-            $nombre = $datos['file_nombre'];
-            return $nombre;
+            $name = $data['file_name'];
+
+            $this->resize_image($data['full_path']);
+
+            return $name;
+        }
+    }    
+
+    private function resize_image($path_image) {
+        $config['image_library'] = 'gd2';
+        $config['source_image'] = $path_image;
+        $config['maintain_ratio'] = TRUE;
+        $config['width'] = 500;
+        $config['height'] = 500;
+
+        $this->load->library('image_lib', $config);
+
+        $this->image_lib->resize();
+    }
+
+  ////////////////// UPLOAD VIDEO ///////////////////////  
+
+    function movie_delete_video($movie_id = null) {
+        if (!isset($movie_id)) {
+            show_404();
+        }
+
+        $movie = $this->Movie->find($movie_id);
+
+        if (!isset($movie)) {
+            show_404();
+        }
+
+        if ($movie->image !== "") {
+            unlink("uploads/movies/$movie->video");
+
+            $save["video"] = "";
+
+            $this->Movie->update($movie_id, $save);
+
+            $this->session->set_flashdata("msj", "video eliminado");
+            $this->session->set_flashdata("type", "success");
+
+            redirect("/core/dashboard/movie_save/$movie->movie_id");
         }
     }
 
-    public function imagen_promocional() {
-        
-        $api= $this->Api->findByTag("IMAGEN_PROMOCIONAL");
-        $vdatos["imagen"]= $api->valor;
+    private function do_upload_video($uri = "movies") {
 
-        if ($this->input->server("REQUEST_METHOD") == "POST") { // metodo http
-            
-            $save= array("valor" => $this->do_upload('api'));
-            $this->Api->update($api->idApi, $save);
-        
+        // configuraciones sobre la carga del archivo
+        $config['upload_path'] = 'uploads/' . $uri;
+        $config['allowed_types'] = 'mp4|mvk|mov';
+        $config['max_size'] = 8000000; //8000 mb = 8000000 kilobyte
+        $config['max_width'] = 1920;
+        $config['max_height'] = 1080;
+        $config['file_name'] = time() . "_" . $_FILES['video']['name'];
+
+        // carga de la libreria
+        $this->load->library('upload', $config);
+
+        // intento de subida de la imagen
+        if (!$this->upload->do_upload('video')) {
+            // mostrar errores
+            return $this->upload->display_errors();
+        } else {
+            // mostrar datos de la carga de la imagen
+            $data = $this->upload->data();
+
+            // actualizamos en base de datos
+            $name = $data['file_name'];
+
+            $this->resize_video($data['full_path']);
+
+            return $name;
         }
-        // Capa de la Vista
-        $view['body'] = $this->load->view("core/api/imagen_promocional/save", $vdatos, TRUE);
-        $view['title'] = "Registrar película";
-        $this->parser->parse('core/templates/body', $view);
+    }
+
+    private function resize_video($path_video) {
+        $config['video_library'] = 'gd2';
+        $config['source_video'] = $path_video;
+        $config['maintain_ratio'] = TRUE;
+        $config['width'] = 500;
+        $config['height'] = 500;
+
+        $this->load->library('video_lib', $config);
+
+        $this->video_lib->resize();
     }
 
 }

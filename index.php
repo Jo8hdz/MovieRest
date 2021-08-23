@@ -35,8 +35,8 @@
  * @since	Version 1.0.0
  * @filesource
  */
-define('TAMANIO_PAGINA', 10);// Tamaño de paginacion por default
-define('NOMBRE_APP', "+Movies");// Nombre de la aplicacion
+define('PAGE_SIZE', 2);
+define('NAME_APP', "YouUPP");
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT

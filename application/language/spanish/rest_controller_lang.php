@@ -13,6 +13,6 @@ $lang['text_rest_ajax_only'] = 'Sólo peticiones ajax permitidas';
 $lang['text_rest_api_key_unauthorized'] = 'Esta clave de API no tiene acceso al controlador solicitado';
 $lang['text_rest_api_key_permissions'] = 'Esta clave de API no tiene suficientes permisos';
 $lang['text_rest_api_key_time_limit'] = 'Esta clave de API ha alcanzado el límite de tiempo para este método';
-$lang['text_rest_ip_address_time_limit'] = 'Esta dirección IP ha alcanzado el límite de tiempo para este método'; //todo translate
+$lang['text_rest_ip_address_time_limit'] = 'Esta dirección IP ha alcanzado el límite de tiempo para este método';//todo translate
 $lang['text_rest_unknown_method'] = 'Método desconocido';
 $lang['text_rest_unsupported'] = 'Protocolo no soportado';
